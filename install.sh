@@ -12,7 +12,7 @@ ln -sf $dotfiles_dir/.gitignore.global $HOME/.gitignore.global
 ln -sf $dotfiles_dir/.gitconfig $HOME/.gitconfig
 ln -sf $dotfiles_dir/.gitattributes $HOME/.gitattributes
 ln -sf $dotfiles_dir/.agignore $HOME/.agignore
-cp -a $dotfiles_dir/.config/zsh $HOME/.config/zsh
+cp -a "$dotfiles_dir/.config/zsh" "$HOME/.config/zsh"
 
 # Install FZF
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
