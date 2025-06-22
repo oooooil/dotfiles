@@ -1,6 +1,22 @@
 #!/usr/bin/env bash
 
-set -eu
+set -e
+
+dotfiles_dir="$HOME"/dotfiles
+
+# Link dotfiles
+mkdir -p "$HOME"/.config
+rm -rf "$HOME"/.{zshrc,zprofile,profile,bashrc,bash_logout}
+ln -sf $dotfiles_dir/.zshenv $HOME/.zshenv
+ln -sf $dotfiles_dir/.gitignore.global $HOME/.gitignore.global
+ln -sf $dotfiles_dir/.gitconfig $HOME/.gitconfig
+ln -sf $dotfiles_dir/.gitattributes $HOME/.gitattributes
+ln -sf $dotfiles_dir/.agignore $HOME/.agignore
+cp -a $dotfiles_dir/.config/zsh $HOME/.config/zsh
+
+# Install FZF
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install --key-bindings --completion --no-update-rc
 
 # Initialize SSH directory and setup SSH key
 echo "Setting up SSH configuration..."
@@ -13,7 +29,7 @@ if [ ! -d "$SSH_DIR" ]; then
 fi
 
 # Set correct permissions for .ssh directory
-chmod 700 "$SSH_DIR"
+chmod 700 "$SSH_DIR" || echo "Failed to set permissions for $SSH_DIR"
 
 # Check if SSH_KEY_id_ed25519 environment variable is set
 if [ -z "${SSH_KEY_ID_ED25519:-}" ]; then
@@ -32,4 +48,53 @@ else
 fi
 
 echo "SSH configuration setup finished"
+
+# Setup zsh configuration
+echo "Setting up zsh configuration..."
+
+# Create zsh config directory
+ZSH_CONFIG_DIR="$HOME/.config/zsh"
+echo "Creating zsh config directory: $ZSH_CONFIG_DIR"
+
+# Set XDG_CONFIG_HOME if not already set
+if [[ -z "$XDG_CONFIG_HOME" ]]; then
+    export XDG_CONFIG_HOME="$HOME/.config/"
+    echo "Set XDG_CONFIG_HOME to: $XDG_CONFIG_HOME"
+fi
+
+# Set ZDOTDIR if zsh config directory exists
+if [[ -d "$XDG_CONFIG_HOME/zsh" ]]; then
+    export ZDOTDIR="$XDG_CONFIG_HOME/zsh/"
+    echo "Set ZDOTDIR to: $ZDOTDIR"
+fi
+
+# Add environment variables to /etc/zprofile
+echo "Adding environment variables to /etc/zprofile..."
+cat << EOF | sudo tee -a /etc/zprofile > /dev/null
+
+if [[ -z "\$XDG_CONFIG_HOME" ]]
+then
+        export XDG_CONFIG_HOME="\$HOME/.config/"
+fi
+
+if [[ -d "\$XDG_CONFIG_HOME/zsh" ]]
+then
+        export ZDOTDIR="\$XDG_CONFIG_HOME/zsh/"
+fi
+EOF
+
+echo "zsh configuration setup completed"
+
+# Install vim configuration
+echo "Installing vim configuration..."
+curl https://raw.githubusercontent.com/e7h4n/e7h4n-vim/master/bootstrap.sh -L -o - | sh
+echo "vim configuration installation completed"
+
+# Install zimfw (zsh framework)
+echo "Installing zimfw..."
+rm -rf ${ZDOTDIR:-${HOME}}/.zim
+git clone --recursive https://github.com/zimfw/zimfw.git ${ZDOTDIR:-${HOME}}/.zim
+echo "zimfw installation completed"
+
+echo "All setup completed successfully!"
 
