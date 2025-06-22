@@ -6,14 +6,6 @@ RUN <<EOF
 #!/usr/bin/env bash
 set -eu
 
-sed -i 's|http://archive.ubuntu.com/|https://mirrors.aliyun.com/|g' /etc/apt/sources.list
-sed -i 's|http://ports.ubuntu.com/|https://mirrors.aliyun.com/|g' /etc/apt/sources.list
-EOF
-
-RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/apt <<EOF
-#!/usr/bin/env bash
-set -eu
-
 apt-get update
 apt-get install git curl wget ca-certificates -y --no-install-recommends
 apt-get clean
@@ -22,7 +14,7 @@ rm -rf /tmp/*
 rm -rf /var/tmp/*
 EOF
 
-RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/apt <<EOF
+RUN <<EOF
 #!/usr/bin/env bash
 apt-get update && apt-get install -y \
     build-essential \
@@ -65,7 +57,7 @@ make install
 rm -rf /tmp/vim
 EOF
 
-RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/apt <<EOF
+RUN <<EOF
 #!/bin/bash
 set -eu
 apt-get update
@@ -78,7 +70,7 @@ rm -rf /tmp/*
 rm -rf /var/tmp/*
 EOF
 
-RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/apt <<EOF
+RUN <<EOF
 #!/bin/bash
 set -eu
 curl -fsSL https://apt.cli.rs/pubkey.asc | tee -a /usr/share/keyrings/rust-tools.asc
