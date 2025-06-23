@@ -15,8 +15,14 @@ ln -sf $dotfiles_dir/.agignore $HOME/.agignore
 cp -a "$dotfiles_dir/.config/zsh" "$HOME/.config/zsh"
 
 # Install FZF
-git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-~/.fzf/install --key-bindings --completion --no-update-rc
+if [ ! -d "$HOME/.fzf" ]; then
+    echo "Installing FZF..."
+    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+    ~/.fzf/install --key-bindings --completion --no-update-rc
+    echo "FZF installation completed"
+else
+    echo "FZF already exists, skipping installation"
+fi
 
 # Initialize SSH directory and setup SSH key
 echo "Setting up SSH configuration..."
