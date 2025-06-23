@@ -107,6 +107,18 @@ EOF
 
 echo "zsh configuration setup completed"
 
+# Install vim on Ubuntu if not exists
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    if [ "$ID" = "ubuntu" ] && ! command -v vim >/dev/null 2>&1; then
+        echo "Ubuntu system detected and vim not found, installing vim..."
+        sudo add-apt-repository -y ppa:jonathonf/vim
+        sudo apt update
+        sudo apt install -y vim
+        echo "vim installation completed"
+    fi
+fi
+
 # Install vim configuration
 echo "Installing vim configuration..."
 curl https://raw.githubusercontent.com/e7h4n/e7h4n-vim/master/bootstrap.sh -L -o - | sh
