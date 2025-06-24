@@ -91,12 +91,23 @@ EOF
 
 echo "zsh configuration setup completed"
 
+
+# Install btop and htop on Ubuntu
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    if [ "$ID" = "ubuntu" ]; then
+        echo "Ubuntu system detected, installing btop and htop..."
+        sudo apt update -y
+        sudo apt install -y btop htop
+        echo "btop and htop installation completed"
+    fi
+fi
+
 # Install vim on Ubuntu if not exists
 if [ -f /etc/os-release ]; then
     . /etc/os-release
     if [ "$ID" = "ubuntu" ] && ! command -v vim >/dev/null 2>&1; then
         echo "Ubuntu system detected and vim not found, installing vim..."
-        sudo apt update
         sudo apt install -y software-properties-common
         sudo add-apt-repository -y ppa:jonathonf/vim
         sudo apt update
