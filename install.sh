@@ -96,6 +96,8 @@ if [ -f /etc/os-release ]; then
     . /etc/os-release
     if [ "$ID" = "ubuntu" ] && ! command -v vim >/dev/null 2>&1; then
         echo "Ubuntu system detected and vim not found, installing vim..."
+        sudo apt update
+        sudo apt install -y software-properties-common
         sudo add-apt-repository -y ppa:jonathonf/vim
         sudo apt update
         sudo apt install -y vim
