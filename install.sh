@@ -96,6 +96,13 @@ echo "zsh configuration setup completed"
 if [ -f /etc/os-release ]; then
     . /etc/os-release
     if [ "$ID" = "ubuntu" ]; then
+        # Check if this is a minimized Ubuntu system
+        if [ -f /usr/bin/unminimize ]; then
+            echo "Ubuntu minimized system detected, running unminimize..."
+            sudo unminimize
+            echo "Unminimize completed"
+        fi
+        
         echo "Ubuntu system detected, installing btop and htop..."
         sudo apt update -y
         sudo apt install -y btop htop
