@@ -135,9 +135,11 @@ git clone --recursive https://github.com/zimfw/zimfw.git ${ZDOTDIR:-${HOME}}/.zi
 echo "zimfw installation completed"
 
 echo "Installing claude code..."
+rm -rf ~/.claude
 mkdir -p ~/.config/claude
 ln -sf ~/.config/claude ~/.claude
-npx @anthropic-ai/claude-code install
+sudo npm install -g @anthropic-ai/claude-code
+claude install
 
 echo "All setup completed successfully!"
 
