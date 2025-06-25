@@ -129,6 +129,7 @@ echo "zimfw installation completed"
 
 echo "Installing claude code..."
 sudo npm install -g @anthropic-ai/claude-code
+mkdir -pv ~/.config/claude
 rm -rf ~/.claude
 ln -sf ~/.config/claude ~/.claude
 
