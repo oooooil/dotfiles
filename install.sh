@@ -120,7 +120,6 @@ rm -rf ~/.claude
 mkdir -p ~/.config/claude
 ln -sf ~/.config/claude ~/.claude
 sudo npm install -g @anthropic-ai/claude-code
-claude install
 
 echo "All setup completed successfully!"
 
