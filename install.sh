@@ -120,6 +120,7 @@ rm -rf ~/.claude
 mkdir -p ~/.config/claude
 ln -sf ~/.config/claude ~/.claude
 sudo npm install -g @anthropic-ai/claude-code
+claude mcp add playwright npx @playwright/mcp@latest
 
 echo "All setup completed successfully!"
 
