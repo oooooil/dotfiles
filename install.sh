@@ -6,6 +6,7 @@ dotfiles_dir="$HOME"/dotfiles
 
 # Link dotfiles
 mkdir -p "$HOME"/.config
+mkdir -p ~/.local/bin
 rm -rf "$HOME"/.{zshrc,zprofile,profile,bashrc,bash_logout}
 ln -sf $dotfiles_dir/.zshenv $HOME/.zshenv
 ln -sf $dotfiles_dir/.gitignore.global $HOME/.gitignore.global
@@ -46,10 +47,10 @@ else
     SSH_KEY_FILE="$SSH_DIR/id_ed25519"
     echo "Writing SSH private key to: $SSH_KEY_FILE"
     echo "$SSH_KEY_ID_ED25519" > "$SSH_KEY_FILE"
-    
+
     # Set correct permissions for private key file
     chmod 600 "$SSH_KEY_FILE"
-    
+
     echo "SSH key setup completed successfully"
 fi
 
@@ -119,5 +120,10 @@ echo "Installing claude code..."
 sudo npm install -g @anthropic-ai/claude-code
 claude mcp add playwright npx @playwright/mcp@latest
 
-echo "All setup completed successfully!"
+# Install start_bot script
+echo "Installing start_bot script..."
+cp "$dotfiles_dir/start_bot" ~/.local/bin/start_bot
+chmod +x ~/.local/bin/start_bot
+echo "start_bot script installed to ~/.local/bin/"
 
+echo "All setup completed successfully!"
