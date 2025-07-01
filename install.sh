@@ -4,7 +4,6 @@ set -eu
 
 dotfiles_dir="$HOME"/motiff/dotfiles
 
-More actions
 # Initialize SSH directory and setup SSH key
 echo "Setting up SSH configuration..."
 
