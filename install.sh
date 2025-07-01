@@ -1,8 +1,29 @@
-# install.sh
 #!/usr/bin/env bash
-set -eu
 
-dotfiles_dir="$HOME"/motiff/dotfiles
+set -e
+
+dotfiles_dir="$HOME"/dotfiles
+
+# Link dotfiles
+mkdir -p "$HOME"/.config
+mkdir -p ~/.local/bin
+rm -rf "$HOME"/.{zshrc,zprofile,profile,bashrc,bash_logout}
+ln -sf $dotfiles_dir/.zshenv $HOME/.zshenv
+ln -sf $dotfiles_dir/.gitignore.global $HOME/.gitignore.global
+ln -sf $dotfiles_dir/.gitconfig $HOME/.gitconfig
+ln -sf $dotfiles_dir/.gitattributes $HOME/.gitattributes
+ln -sf $dotfiles_dir/.agignore $HOME/.agignore
+cp -a "$dotfiles_dir/.config/zsh" "$HOME/.config/zsh"
+
+# Install FZF
+if [ ! -d "$HOME/.fzf" ]; then
+    echo "Installing FZF..."
+    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+    ~/.fzf/install --key-bindings --completion --no-update-rc
+    echo "FZF installation completed"
+else
+    echo "FZF already exists, skipping installation"
+fi
 
 # Initialize SSH directory and setup SSH key
 echo "Setting up SSH configuration..."
@@ -71,8 +92,6 @@ EOF
 
 echo "zsh configuration setup completed"
 
-
-
 # Install vim on Ubuntu if not exists
 if [ -f /etc/os-release ]; then
     . /etc/os-release
@@ -91,10 +110,20 @@ echo "Installing vim configuration..."
 curl https://raw.githubusercontent.com/e7h4n/e7h4n-vim/master/bootstrap.sh -L -o - | sh
 echo "vim configuration installation completed"
 
+# Install zimfw (zsh framework)
+echo "Installing zimfw..."
+rm -rf ${ZDOTDIR:-${HOME}}/.zim
+git clone --recursive https://github.com/zimfw/zimfw.git ${ZDOTDIR:-${HOME}}/.zim
+echo "zimfw installation completed"
+
 echo "Installing claude code..."
 sudo npm install -g @anthropic-ai/claude-code
 claude mcp add playwright npx @playwright/mcp@latest
 
+# Install start_bot script
+echo "Installing start_bot script..."
+cp "$dotfiles_dir/start_bot" ~/.local/bin/start_bot
+chmod +x ~/.local/bin/start_bot
+echo "start_bot script installed to ~/.local/bin/"
 
 echo "All setup completed successfully!"
-
