@@ -9,8 +9,6 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 
 # copy zsh config
 ln -sf $dotfiles_dir/.zshrc $HOME/.zshrc
-
-More actions
 echo "zsh configuration setup completed"
 
 # Install vim on Ubuntu if not exists
